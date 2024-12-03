@@ -11,7 +11,7 @@
   (->> input
        utils/to-lines
        (map utils/parse-longs)
-       (mapv vec) ;; Convert the entire tuple to a vector
+       (map vec) ;; Convert the entire tuple to a vector
        (apply mapv vector) ;; Transpose the vectors
        get-dists ;; Get the distances
        (reduce +))) ;; Sum the distances
@@ -24,7 +24,7 @@
   (->> input
        utils/to-lines
        (map utils/parse-longs)
-       (mapv vec) ;; Convert the entire tuple to a vector
+       (map vec) ;; Convert the entire tuple to a vector
        (apply mapv vector) ;; Transpose the vectors
        get-similarity ;; Get the similarities
        (reduce +))) ;; Sum the distances
