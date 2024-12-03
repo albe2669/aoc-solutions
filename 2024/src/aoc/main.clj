@@ -48,9 +48,9 @@
         sub   (try (requiring-resolve
                     (symbol (format "aoc.day%02d/part-%d"
                                     day part)))
-                   (catch Exception _
-                     (format "No fn found for day %d part %d."
-                             day part)))]
+                   (catch Exception e
+                     (format "No fn found for day %d part %d. Error: %s"
+                             day part e)))]
     (cond
       (or (< day 1)
           (> day 25)) (.println *err* "Day out of range.")
