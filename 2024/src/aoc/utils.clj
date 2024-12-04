@@ -6,6 +6,11 @@
 (defn to-lines [input]
   (str/split-lines input))
 
+(defn to-grid [input]
+  (->> input
+       (mapv str/trim)
+       (mapv #(vec (mapv char %)))))
+
 (defn parse-longs [line]
   (mapv parse-long (re-seq #"\d+" line)))
 
