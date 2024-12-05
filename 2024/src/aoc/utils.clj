@@ -11,6 +11,9 @@
        (mapv str/trim)
        (mapv #(vec (mapv char %)))))
 
+(defn to-blocks [input]
+  (str/split input #"\n\n"))
+
 (defn parse-longs [line]
   (mapv parse-long (re-seq #"\d+" line)))
 
