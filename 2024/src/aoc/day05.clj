@@ -1,6 +1,5 @@
 (ns aoc.day05
-  (:require [aoc.utils :as u])
-  (:gen-class))
+  (:require [aoc.utils :as u]))
 
 (defn create-rules [rules]
   (reduce (fn [crules [n1 n2]]
