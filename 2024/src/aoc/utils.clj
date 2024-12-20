@@ -12,7 +12,10 @@
        (mapv #(vec (mapv char %)))))
 
 (defn to-chars [input]
-  (vec (mapv char input)))
+  (map char input))
+
+(defn to-strs [input]
+  (map str input))
 
 (defn out-of-bounds-fn [row-bound col-bound]
   (fn [[row col]]
@@ -24,6 +27,9 @@
 
 (defn parse-longs [line]
   (mapv parse-long (re-seq #"\d+" line)))
+
+(defn parse-longs-seq [input]
+  (map parse-long input))
 
 ;; Stolen from: https://github.com/rjray/advent-2024-clojure/blob/master/src/advent_of_code/utils.clj
 (defn read-input
@@ -47,3 +53,9 @@
       (recur m (cons (list (.start m) (.group m)) res))
       (reverse res))))
 
+(defn matrix-to-map [matrix]
+  (into {}
+        (for [row (range (count matrix))
+              col (range (count (first matrix)))
+              :let [coord [row col]]]
+          [coord (get-in matrix coord)])))
