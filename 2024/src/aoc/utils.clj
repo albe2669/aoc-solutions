@@ -59,3 +59,16 @@
               col (range (count (first matrix)))
               :let [coord [row col]]]
           [coord (get-in matrix coord)])))
+
+(defn neighbors [[row col]]
+  [{:coord [(dec row) (dec col)] :dir :up-left}
+   {:coord [(dec row) col] :dir :up}
+   {:coord [(dec row) (inc col)] :dir :up-right}
+   {:coord [row (dec col)] :dir :left}
+   {:coord [row (inc col)] :dir :right}
+   {:coord [(inc row) (dec col)] :dir :down-left}
+   {:coord [(inc row) col] :dir :down}
+   {:coord [(inc row) (inc col)] :dir :down-right}])
+
+(defn direct-neighbors [coord]
+  (filter #(#{:up :down :left :right} (:dir %)) (neighbors coord)))
