@@ -26,7 +26,7 @@
   (str/split input #"\n\n"))
 
 (defn parse-longs [line]
-  (mapv parse-long (re-seq #"\d+" line)))
+  (mapv parse-long (re-seq #"[-+]?\d+" line)))
 
 (defn parse-longs-seq [input]
   (map parse-long input))
