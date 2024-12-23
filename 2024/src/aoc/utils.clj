@@ -1,7 +1,9 @@
 #_{:clj-kondo/ignore [:namespace-name-mismatch]}
 (ns aoc.utils
   (:require [clojure.string :as str]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [clojure.set :as set]
+            [clojure.data.priority-map :refer [priority-map-keyfn]]))
 
 (defn to-lines [input]
   (str/split-lines input))
@@ -72,3 +74,40 @@
 
 (defn direct-neighbors [coord]
   (filter #(#{:up :down :left :right} (:dir %)) (neighbors coord)))
+
+(defn dissoc-by [pred m]
+  (apply dissoc m (filter pred (keys m))))
+
+(defn- merge-costs [[curr-cost curr-prevs :as curr] [new-cost new-prevs :as new]]
+  (cond (= curr-cost new-cost) [curr-cost (set/union curr-prevs new-prevs)]
+        (< new-cost curr-cost) new
+        :else curr))
+
+(defn dijkstra
+  "Dijkstra's algorithm for finding the minimum path between two positions in
+  a matrix. Positions consist of a coordinate and a direction.
+  
+  - start: the start position [coordinate, direction]
+  - target: the target coordinate. This does not include the direction.
+  - neighbour-fn: a function that takes a position and returns a map of positions and
+  the cost of travelling to that position.
+  - alt-targets: specifies alternate nodes that are also targets. This is
+  useful when node have an associated state that don't matter for the target.
+  For example, if you're doing this search on a matrix where the direction
+  you're travelling in is important."
+  [start target neighbour-fn & {:keys [alt-targets] :or {alt-targets #{}}}]
+  (loop [q (priority-map-keyfn first start [0 #{}])
+         res {}]
+    (let [[node [cost :as cost-and-prevs]] (peek q)]
+      (cond (not (seq q)) res
+            (or (= node target) (alt-targets node))
+            (assoc res node cost-and-prevs)
+            :else
+            (let [new-costs (->> (neighbour-fn node)
+                                 ;; skip nodes we've visited
+                                 (dissoc-by #(res %))
+                                 (#(update-vals % (partial + cost))))]
+              (recur (merge-with merge-costs
+                                 (pop q)
+                                 (update-vals new-costs #(vector % (set [node]))))
+                     (assoc res node cost-and-prevs)))))))
