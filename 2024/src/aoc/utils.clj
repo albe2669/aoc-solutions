@@ -111,3 +111,61 @@
                                  (pop q)
                                  (update-vals new-costs #(vector % (set [node]))))
                      (assoc res node cost-and-prevs)))))))
+
+(defn dijkstra-matrix
+  "Dijkstra's algorithm for finding the minimum path between two positions in
+  a matrix. Positions consist of a coordinate and a direction.
+  
+  - start: the start position [coordinate, direction]
+  - target: the target coordinate. This does not include the direction.
+  - nbrs-fn: a function that takes a position and returns a map of positions and
+  the cost of travelling to that position.
+  - transform-fn: transform a position to another unique identifer. For example,
+  using first as the transform-fn will ignore direction."
+  [start target nbrs-fn & {:keys [transform-fn] :or {transform-fn identity}}]
+  (loop [q (priority-map-keyfn first start [0 #{}])
+         res {}]
+    (let [[[coord :as pos] [cost :as cost-and-prevs]] (peek q)]
+      (cond (not (seq q)) res
+            (= coord target)
+            (assoc res (transform-fn pos) cost-and-prevs)
+            :else
+            (let [new-costs (->> (nbrs-fn pos)
+                                 ;; skip nodes we've visited
+                                 (dissoc-by #(res (transform-fn %)))
+                                 (#(update-vals % (partial + cost))))]
+              (recur (merge-with merge-costs
+                                 (pop q)
+                                 (update-vals new-costs #(vector % (set [(transform-fn pos)]))))
+                     (assoc res (transform-fn pos) cost-and-prevs)))))))
+
+(defn dfs
+  "Depth First Search Algorithm
+  - start: the start node
+  - target: the target node
+  - nbrs-fn: a functions that takes a node and returns a list of its neighboring
+  nodes."
+  [start target nbrs-fn]
+  (loop [q [[start (set nil)]]
+         res {}]
+    (let [[curr path] (peek q)]
+      (cond (nil? curr) res
+            (= curr target) (assoc res target (conj path target))
+            (res curr) (recur (pop q) res)
+            :else (recur (vec (concat (pop q)
+                                      (map #(vector % (conj path curr))
+                                           (nbrs-fn curr))))
+                         (assoc res curr (conj path curr)))))))
+
+(defn manhattan-distance [[r1 c1] [r2 c2]]
+  (+ (Math/abs (- r1 r2))
+     (Math/abs (- c1 c2))))
+
+(defn create-field
+  "Create a NxM field as a matrix (vector of vectors). Fill with `with` or nil"
+  [N M & [with]]
+  (if (or (seq? with) (vector? with))
+    ;; Ignore N/M and treat each element of `with` as a row in the field
+    (mapv vec with)
+    ;; Otherwise, use the value of `with` itself (which may be nil)
+    (vec (repeat M (vec (repeat N with))))))
