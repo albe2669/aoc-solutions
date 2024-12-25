@@ -72,7 +72,6 @@
         path            (reverse (map first (sort-by last costs)))
         pathlen         (dec (count path))]
     (loop [cnt 0, picos 0, path path]
-      (println cnt picos (count path))
       (if (seq (drop 20 path))
         (let [[node & rempath] path
               jumps            (get-jumps-20 node rempath 20)
