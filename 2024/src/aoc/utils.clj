@@ -19,13 +19,20 @@
 (defn to-strs [input]
   (map str input))
 
+(defn in-to-matrix [input]
+  (->> input
+       to-lines
+       (mapv vec)))
+
+(defn matrix-transpose [matrix] (apply mapv vector matrix))
+
+(defn to-blocks [input]
+  (str/split input #"\n\n"))
+
 (defn out-of-bounds-fn [row-bound col-bound]
   (fn [[row col]]
     (or (>= row row-bound) (>= col col-bound)
         (< row 0) (< col 0))))
-
-(defn to-blocks [input]
-  (str/split input #"\n\n"))
 
 (defn parse-longs [line]
   (mapv parse-long (re-seq #"[-+]?\d+" line)))
