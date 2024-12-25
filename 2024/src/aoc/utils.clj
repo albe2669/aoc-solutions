@@ -69,15 +69,21 @@
               :let [coord [row col]]]
           [coord (get-in matrix coord)])))
 
+(def directions
+  [{:dir :up-left :delta [-1 -1]}
+   {:dir :up :delta [-1 0]}
+   {:dir :up-right :delta [-1 1]}
+   {:dir :left :delta [0 -1]}
+   {:dir :right :delta [0 1]}
+   {:dir :down-left :delta [1 -1]}
+   {:dir :down :delta [1 0]}
+   {:dir :down-right :delta [1 1]}])
+
 (defn neighbors [[row col]]
-  [{:coord [(dec row) (dec col)] :dir :up-left}
-   {:coord [(dec row) col] :dir :up}
-   {:coord [(dec row) (inc col)] :dir :up-right}
-   {:coord [row (dec col)] :dir :left}
-   {:coord [row (inc col)] :dir :right}
-   {:coord [(inc row) (dec col)] :dir :down-left}
-   {:coord [(inc row) col] :dir :down}
-   {:coord [(inc row) (inc col)] :dir :down-right}])
+  (for [{:keys [dir delta]} directions
+        :let [row' (+ row (first delta))
+              col' (+ col (second delta))]]
+    {:coord [row' col'] :dir dir :delta delta}))
 
 (defn direct-neighbors [coord]
   (filter #(#{:up :down :left :right} (:dir %)) (neighbors coord)))
@@ -153,7 +159,7 @@
   - nbrs-fn: a functions that takes a node and returns a list of its neighboring
   nodes."
   [start target nbrs-fn]
-  (loop [q [[start (set nil)]]
+  (loop [q [[start []]]
          res {}]
     (let [[curr path] (peek q)]
       (cond (nil? curr) res
