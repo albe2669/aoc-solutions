@@ -1,4 +1,4 @@
- Advent of Code solutions
+# Advent of Code solutions
 This repository contains my solutions to the Advent of Code problems.
 The problems will be ordered in folders labelled day-x
 
@@ -17,7 +17,7 @@ Languages i am vaguely familiar with that i plan to use this year:
 - [x] Cobol
 - [ ] D
 - [ ] Erlang
-- [ ] Excel?
+- [x] Spreadsheet
 - [ ] F#
 - [ ] Go
 - [ ] Java
