@@ -7,39 +7,39 @@ This year i plan to use a different language for each day. As this year only has
 
 Languages i am vaguely familiar with that i plan to use this year:
 
-- Assembly
-- Arduino
-- Bash/Fish
-- C
-- C#
-- C++
-- Clojure
-- Cobol
-- D
-- Erlang
-- Excel?
-- F#
-- Go
-- Java
-- JavaScript/TypeScript
-- Lua
-- Nix (If possible)
-- Powershell
-- Python
-- R
-- Rust
-- Scala
-- SQL
+- [ ] Assembly
+- [ ] Arduino
+- [ ] Bash/Fish
+- [ ] C
+- [ ] C#
+- [ ] C++
+- [ ] Clojure
+- [x] Cobol
+- [ ] D
+- [ ] Erlang
+- [ ] Excel?
+- [ ] F#
+- [ ] Go
+- [ ] Java
+- [ ] JavaScript/TypeScript
+- [ ] Lua
+- [ ] Nix (If possible)
+- [ ] Powershell
+- [ ] Python
+- [ ] R
+- [ ] Rust
+- [ ] Scala
+- [ ] SQL
 
 Languages i i have never used, or completely forgotten, that i might try to use:
 
-- Haskell
-- Kotlin
-- linefeed?
-- Maple
-- Odin
-- V
-- VBA
-- Zig
+- [ ] Haskell
+- [ ] Kotlin
+- [ ] linefeed?
+- [ ] Maple
+- [ ] Odin
+- [ ] V
+- [ ] VBA
+- [ ] Zig
 
 The greatest challenge will be to get the development environments set up for each language and selecting problems that are feasible to solve in the languages i am less familiar with.
