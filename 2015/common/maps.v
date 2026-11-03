@@ -7,7 +7,7 @@ pub interface Hashable {
 }
 
 pub struct HashMap[K, V] {
-mut:
+pub mut:
 	data map[int]V
 	keys map[int]K
 }
@@ -54,5 +54,13 @@ pub fn (mut h HashMap[K, V]) map_or_default(key K, func fn (V) V, default V) {
 
 pub fn (h HashMap[K, V]) len() int {
 	return h.data.len
+}
+
+pub fn (h HashMap[K, V]) keys() []K {
+	mut out := []K{}
+	for _, k in h.keys {
+		out << k
+	}
+	return out
 }
 
