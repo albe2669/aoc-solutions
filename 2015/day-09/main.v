@@ -30,31 +30,11 @@ fn parse_input(mut reader common.Reader) map[string]map[string]int {
 	return distances
 }
 
-fn permutations[T](arr []T) [][]T {
-	if arr.len == 0 {
-		return [[]T{}]
-	}
-
-	mut result := [][]T{}
-	for i, v in arr {
-		mut sub_arr := arr.clone()
-		sub_arr.delete(i)
-		for perm in permutations(sub_arr) {
-			result << [v]
-			for p in perm {
-				result[result.len - 1] << p
-			}
-		}
-	}
-
-	return result
-}
-
 fn shortest_path_that_visits_all_cities(distances map[string]map[string]int) int {
 	cities := distances.keys()
 	mut shortest_distance := -1
 
-	for perm in permutations(cities) {
+	for perm in common.permutations(cities) {
 		mut total_distance := 0
 		for i in 0 .. perm.len - 1 {
 			total_distance += distances[perm[i]][perm[i + 1]]
