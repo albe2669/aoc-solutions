@@ -13,7 +13,7 @@ The problems will be ordered in folders labelled day-x
 | 2021 | ? | 0 | 
 | 2022 | Rust | 27 |
 | 2023 | Cobol | 1 |
-| 2024 | Clojure | 45 |
+| 2024 | Clojure | 50 |
 | 2025 | See below | 2 |
 | 2026 | Odin | TBD |
 
