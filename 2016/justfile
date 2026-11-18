@@ -1,47 +1,26 @@
-kotlinc_version := "2.4.21"
-
 root_dir := justfile_directory()
-build_dir := root_dir / "build"
-common_src := root_dir / "common/src"
-main_src := root_dir / "src/main"
-days_src := root_dir / "day-*"
+gradle_flags := "--offline --quiet"
 template_dir := root_dir / "template"
 
-# Compile all sources to build/. Incremental: reuses build/ if present.
+# Compile main sources. Incremental: reuses Gradle build cache.
 build:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    mkdir -p "{{build_dir}}"
-    srcs=$(find "{{common_src}}" "{{main_src}}" {{days_src}} -name '*.kt' ! -name '*_test.kt' 2>/dev/null)
-    kotlinc $srcs -include-runtime -d "{{build_dir}}/aoc2016.jar" >/dev/null
+    cd "{{root_dir}}" && ./gradlew {{gradle_flags}} compileKotlin
 
-# Compile and run every day's test suite. Exits non-zero if any fail.
-test:
+# Run all day test suites, or one day: just test 1. Exits non-zero if any fail.
+test day='':
     #!/usr/bin/env bash
     set -euo pipefail
-    just build >/dev/null
-    declare -a test_classes=()
-    for f in $(find {{days_src}} -name '*Test.kt' 2>/dev/null | sort); do
-        rel="${f#{{root_dir}}/}"
-        cls="${rel##*src/}"; cls="${cls%.kt}"; cls="${cls//\//.}"
-        test_classes+=("$cls")
-    done
-    rm -rf "{{build_dir}}/tests"
-    kotlinc $(find "{{common_src}}" {{days_src}} -name '*.kt' ! -name '*Test.kt' ! -path '*template*') \
-            $(find {{days_src}} -name '*Test.kt') \
-            -d "{{build_dir}}/tests" >/dev/null
-    status=0
-    for cls in "${test_classes[@]}"; do
-        kotlin -classpath "{{build_dir}}/tests" "${cls}Kt" || status=1
-    done
-    exit $status
+    cd "{{root_dir}}"
+    if [ -n "{{day}}" ]; then
+        day_padded=$(printf '%02d' "{{day}}")
+        ./gradlew --offline test "--tests" "Day${day_padded}Test"
+    else
+        ./gradlew --offline test
+    fi
 
 # Run a solution: just run 1 p2 --test
 run day *args:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    just build >/dev/null
-    java -cp "{{build_dir}}/aoc2016.jar" main.MainKt "{{day}}" {{args}}
+    cd "{{root_dir}}" && ./gradlew {{gradle_flags}} run "--args={{day}} {{args}}"
 
 # Scaffold a new day from template/: just new 7
 new day:
@@ -55,14 +34,12 @@ new day:
     target="{{root_dir}}/day-$day_padded"
     if [ -e "$target" ]; then echo "day-$day_padded already exists"; exit 1; fi
     cp -R "{{template_dir}}/day-XX" "$target"
-    mv "$target/src/days/dayXX" "$target/src/days/day${day_padded}"
-    mv "$target/src/days/day${day_padded}/DayXX.kt" "$target/src/days/day${day_padded}/Day${day_padded}.kt"
-    mv "$target/src/days/day${day_padded}/DayXXTest.kt" "$target/src/days/day${day_padded}/Day${day_padded}Test.kt"
-    grep -R -l 'dayXX\|DayXX\|day-XX\|Day XX' "$target" | while read -r f; do
-        sed -i '' -e "s/dayXX/day${day_padded}/g" -e "s/DayXX/Day${day_padded}/g" -e "s/day-XX/day-$day_padded/g" -e "s/Day XX/Day ${day_num}/g" "$f"
-    done
-    echo "Created $target. Register it in src/main/Main.kt."
+    mv "$target/DayXX.kt" "$target/Day${day_padded}.kt"
+    mv "$target/DayXXTest.kt" "$target/Day${day_padded}Test.kt"
+    sed -i '' -e "s/DayXX/Day${day_padded}/g" -e "s/day-XX/day-$day_padded/g" -e "s/Day XX/Day ${day_num}/g" \
+        "$target/Day${day_padded}.kt" "$target/Day${day_padded}Test.kt"
+    echo "Created $target. Register it in src/Main.kt."
 
-# Remove all build output.
+# Remove all Gradle build output.
 clean:
-    rm -rf "{{build_dir}}"
+    cd "{{root_dir}}" && ./gradlew {{gradle_flags}} clean

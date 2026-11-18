@@ -1,28 +1,43 @@
 # Advent of Code 2016 — Kotlin
 
-One module per day, shared `common` module, no build system: `kotlinc` via `just`.
+One directory per day, shared `common` module. Gradle build with JUnit 5, all Gradle files live in `2016/`; `just` recipes wrap `./gradlew`.
+
+## Layout
+
+```
+2016/
+  day-01/Day01.kt, Day01Test.kt, input.in, test.in
+  common/src/common/   Reader, Day
+  src/Main.kt          entry point
+  template/             scaffold for `just new`
+  gradlew, gradle/, build.gradle.kts, settings.gradle.kts
+```
 
 ## Commands
 
-Run `just --list` inside `2016/` for all recipes. The core ones:
+Run `just --list` for all recipes. The core ones:
 
-- `just build` — compile everything to `build/`
-- `just test` — run all day test suites
+- `just build` — compile everything (incremental)
+- `just test` — run all JUnit test suites
+- `just test <day>` — run one day's tests, e.g. `just test 1`
 - `just run <day> [p1|p2] [--test]` — run a solution (`--test` uses `test.in`)
 - `just new <day>` — scaffold a new day from `template/`
 
+Recipes call `./gradlew --offline --quiet`. Remove `--offline` only if a new dependency was added.
+
 ## Adding a new day
 
-1. `just new 7` — creates `day-07/` with `Day07.kt`, `Day07_test.kt`, `input.in`, `test.in`
-2. Write the solution in `day-07/src/days/day07/Day07.kt`
-3. Add example cases to `day-07/src/days/day07/Day07_test.kt` as `check(...)` calls
-4. Register the day in `src/main/Main.kt` in the `when` block
+1. `just new 7` — creates `day-07/` with `Day07.kt`, `Day07Test.kt`, `input.in`, `test.in`
+2. Write the solution in `day-07/Day07.kt` (default package, implements `common.Day`)
+3. Add example cases to `day-07/Day07Test.kt` as JUnit `@Test` methods with `assertEquals`
+4. Register the day in `src/Main.kt` in the `when` block
 5. Put your puzzle input in `day-07/input.in`; put the example input in `test.in`
+
+Gradle finds day source directories automatically; no build file change is needed for a new day.
 
 `common` provides:
 
-- `common.Reader` — byte/line/int reading over the input, mirrors the 2015 V setup
+- `common.Reader` — byte/line/int reading over the input
 - `common.Day` — the interface each day implements
-- `common.TestCheck` — `check(desc, actual, expected)`, `reportResults(suite)`, `resetTestState()`
 
-Each day's test file is a `main()` that runs its checks and exits non-zero on failure. `just test` compiles and runs every `*_test.kt` and reports pass/fail.
+Each day's test class uses JUnit 5. `just test` runs every `*Test.kt` and reports pass/fail.
