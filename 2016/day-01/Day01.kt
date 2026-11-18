@@ -1,5 +1,3 @@
-package days.day01
-
 import common.Reader
 import kotlin.math.abs
 
