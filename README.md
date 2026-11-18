@@ -32,11 +32,11 @@ Languages i am vaguely familiar with that i plan to use this year:
 - [x] Cobol
 - [ ] D
 - [ ] Erlang
-- [x] Spreadsheet
 - [ ] F#
 - [ ] Go
 - [ ] Java
 - [ ] JavaScript/TypeScript
+- [ ] Kotlin
 - [ ] Lua
 - [ ] Nix (If possible)
 - [ ] Powershell
@@ -45,16 +45,17 @@ Languages i am vaguely familiar with that i plan to use this year:
 - [ ] Rust
 - [ ] Scala
 - [ ] SQL
+- [ ] V
 
-Languages i i have never used, or completely forgotten, that i might try to use:
+Languages i have never used, or completely forgotten, that i might try to use:
 
 - [ ] Haskell
-- [ ] Kotlin
 - [ ] linefeed?
 - [ ] Maple
 - [ ] Odin
-- [ ] V
 - [ ] VBA
 - [ ] Zig
+- [ ] Swift
+- [ ] Julia
 
 The greatest challenge will be to get the development environments set up for each language and selecting problems that are feasible to solve in the languages i am less familiar with.
