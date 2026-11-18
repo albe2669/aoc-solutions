@@ -5,7 +5,7 @@ The problems will be ordered in folders labelled day-x
 | Year | Language | Stars |
 | ----- | -------- | ----- |
 | 2015 | V | 50 |
-| 2016 | ? | 0 | 
+| 2016 | Kotlin | 4 | 
 | 2017 | ? | 0 | 
 | 2018 | ? | 0 | 
 | 2019 | ? | 0 | 
