@@ -16,6 +16,7 @@ fun main(args: Array<String>) {
     val day = when (dayNumber) {
         "01" -> Day01()
         "02" -> Day02()
+        "03" -> Day03()
         else -> {
             System.err.println("Day $dayNumber not implemented yet")
             exitProcess(1)
