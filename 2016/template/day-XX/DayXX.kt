@@ -1,5 +1,3 @@
-package days.dayXX
-
 import common.Reader
 
 class DayXX : common.Day {

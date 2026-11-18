@@ -1,7 +1,4 @@
-package main
-
 import common.runDay
-import days.day01.Day01
 import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
@@ -18,6 +15,7 @@ fun main(args: Array<String>) {
 
     val day = when (dayNumber) {
         "01" -> Day01()
+        "02" -> Day02()
         else -> {
             System.err.println("Day $dayNumber not implemented yet")
             exitProcess(1)
