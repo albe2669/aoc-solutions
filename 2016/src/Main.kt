@@ -18,6 +18,7 @@ fun main(args: Array<String>) {
         "02" -> Day02()
         "03" -> Day03()
         "04" -> Day04()
+        "05" -> Day05()
         else -> {
             System.err.println("Day $dayNumber not implemented yet")
             exitProcess(1)
