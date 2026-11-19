@@ -40,6 +40,9 @@ fun main(args: Array<String>) {
         Day06()
       }
 
+      "07" -> {
+        Day07()
+      }
 
       else -> {
         System.err.println("Day $dayNumber not implemented yet")
