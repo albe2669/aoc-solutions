@@ -38,6 +38,8 @@ new day:
     mv "$target/DayXXTest.kt" "$target/Day${day_padded}Test.kt"
     sed -i '' -e "s/DayXX/Day${day_padded}/g" -e "s/day-XX/day-$day_padded/g" -e "s/Day XX/Day ${day_num}/g" \
         "$target/Day${day_padded}.kt" "$target/Day${day_padded}Test.kt"
+    aoc -y 2016 -d "$day_num" download -I -i "$target/input.in"
+    aoc -y 2016 -d "$day_num" read
     echo "Created $target. Register it in src/Main.kt."
 
 # Remove all Gradle build output.
